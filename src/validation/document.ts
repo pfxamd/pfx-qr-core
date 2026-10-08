@@ -18,13 +18,14 @@ export function validateDocument(doc: QrDocument): QrValidation {
   }
   if (!Number.isInteger(doc.size) || doc.size < 128 || doc.size > 4096) errors.push('Size must be an integer from 128 to 4096');
   if (!Number.isInteger(doc.margin) || doc.margin < 0 || doc.margin > 128) errors.push('Margin must be an integer from 0 to 128');
-  if (!hex.test(doc.foreground) || !hex.test(doc.background)) errors.push('Colors must use #RRGGBB');
+  if (typeof doc.foreground !== 'string' || typeof doc.background !== 'string' || !hex.test(doc.foreground) || !hex.test(doc.background)) errors.push('Colors must use #RRGGBB');
   if (doc.margin === 0) warnings.push('Missing quiet zone may affect scanning');
   if (Number.isFinite(doc.size) && Number.isFinite(doc.margin) && doc.margin * 2 >= doc.size) errors.push('Margin must leave space for the QR symbol');
   if (!['L','M','Q','H'].includes(doc.correction)) errors.push('Invalid error correction level');
   if (!['square','rounded','dots','classy','classy-rounded','extra-rounded'].includes(doc.dotStyle)) errors.push('Invalid dot style');
+  if (doc.logo !== undefined && (typeof doc.logo !== 'string' || !doc.logo.trim())) errors.push('Logo must be a non-empty string when provided');
   if (doc.logo && doc.correction !== 'H') warnings.push('Logos work best with high error correction');
-  if (hex.test(doc.foreground) && hex.test(doc.background)) {
+  if (typeof doc.foreground === 'string' && typeof doc.background === 'string' && hex.test(doc.foreground) && hex.test(doc.background)) {
     const a = luminance(doc.foreground), b = luminance(doc.background);
     const contrast = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
     if (contrast < 4.5) warnings.push('Low contrast may affect scanning');
