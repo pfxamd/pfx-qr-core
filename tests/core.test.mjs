@@ -24,3 +24,28 @@ test('capacity changes with error correction level and UTF-8 byte length', () =>
   assert.equal(validateDocument({...doc,payload,correction:'H'}).valid, false);
   assert.equal(validateDocument({...doc,payload:'🙂'.repeat(320),correction:'H'}).valid, false);
 });
+
+test('malformed runtime color values fail validation instead of throwing', () => {
+  for (const invalid of [null, 123, {}, [], '#fff', '#GGGGGG']) {
+    assert.doesNotThrow(() => validateDocument({...doc, foreground: invalid}));
+    assert.equal(validateDocument({...doc, foreground: invalid}).valid, false);
+    assert.equal(validateDocument({...doc, background: invalid}).valid, false);
+  }
+});
+test('empty or malformed optional logos are rejected', () => {
+  for (const invalid of ['', '   ', null, 2, {}]) {
+    assert.equal(validateDocument({...doc, logo: invalid}).valid, false);
+  }
+});
+test('QR capacity has exact correction-level boundaries', () => {
+  const capacities = {L:2953, M:2331, Q:1663, H:1273};
+  for (const [correction, max] of Object.entries(capacities)) {
+    assert.equal(validateDocument({...doc, correction, payload:'a'.repeat(max)}).valid, true);
+    assert.equal(validateDocument({...doc, correction, payload:'a'.repeat(max+1)}).valid, false);
+  }
+});
+test('quiet zone, inverted colors and logo correction produce warnings', () => {
+  assert.ok(validateDocument({...doc, margin:0}).warnings.some(s => s.includes('quiet zone')));
+  assert.ok(validateDocument({...doc, foreground:'#ffffff', background:'#000000'}).warnings.some(s => s.includes('Light modules')));
+  assert.ok(validateDocument({...doc, logo:'data:image/png;base64,abcd', correction:'L'}).warnings.some(s => s.includes('Logos')));
+});
