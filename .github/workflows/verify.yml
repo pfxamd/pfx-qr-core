@@ -1,0 +1,35 @@
+name: Verify QR Core
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  core-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Verify types and unit tests
+        run: npm run verify
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium firefox
+      - name: Run real QR roundtrip tests
+        run: npm run test:browser
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qr-browser-failure
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore

@@ -2,8 +2,15 @@
 
 Modular QR code generation, styling, validation, scanning, and export library.
 
-Current development status: **0.1.0-alpha.6**, awaiting real-browser roundtrip verification.
+**Status:** 0.1.0-alpha.6; browser verification is in progress.
 
-Architecture: payload encoding, document validation, independent QR generation and scanning adapters.
+## Development
 
-The implementation and verification workflow are being imported from the local alpha project. This repository is not yet a stable release.
+```bash
+npm install
+npm run verify
+npx playwright install --with-deps chromium firefox
+npm run test:browser
+```
+
+This core is intended to be reusable across web projects. Browser integration tests generate QR images and decode them with a separate scanning library. Do not use in production until the integration workflow passes.

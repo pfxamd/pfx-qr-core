@@ -1,0 +1,39 @@
+{
+  "name": "@pfxamd/qr-core",
+  "version": "0.1.0-alpha.6",
+  "private": true,
+  "type": "module",
+  "description": "Framework-independent QR encoding, styling, validation, scanning and export adapters",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "verify": "npm run typecheck && npm test",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "qr-code-styling": "1.9.2",
+    "qr-scanner": "1.4.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "README.md"
+  ]
+}
