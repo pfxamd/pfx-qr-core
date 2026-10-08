@@ -10,7 +10,15 @@ declare global {
 async function scannerReadyBlob(source: Blob, format: QrRenderFormat): Promise<Blob> {
   if (format !== 'svg') return source;
   // QR scanners need bitmap pixels. Rasterize vector output before decoding.
-  const bitmap = await createImageBitmap(source);
+  let bitmap: ImageBitmap;
+  try {
+    bitmap = await createImageBitmap(source);
+  } catch (error) {
+    const svg = await source.text();
+    const parsed = new DOMParser().parseFromString(svg, 'image/svg+xml');
+    const parserErrors = parsed.querySelectorAll('parsererror');
+    throw new Error('SVG bitmap decode failed: ' + String(error) + '; XML errors: ' + Array.from(parserErrors).map(el => el.textContent).join(' ') + '; SVG prefix: ' + svg.slice(0, 1200));
+  }
   try {
     const canvas = document.createElement('canvas');
     canvas.width = bitmap.width;
