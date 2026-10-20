@@ -8,7 +8,11 @@ export class QrCore {
     if (!result.valid) throw new Error(result.errors.join('; '));
     return this.generator.render(document, format);
   }
+  /** Decode an uploaded QR image locally without sending it to a server. */
+  async decode(image: Blob): Promise<string | null> {
+    return this.decoder.decode(image);
+  }
   async verify(image: Blob, expected: string): Promise<boolean> {
-    return (await this.decoder.decode(image)) === expected;
+    return (await this.decode(image)) === expected;
   }
 }
