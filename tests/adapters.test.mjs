@@ -32,6 +32,7 @@ test('scanner decodes image and distinguishes missing QR', async () => {
 });
 test('core verifies decoded image equals expected payload', async () => {
   const core=new QrCore(new StylingGenerator(class {async getRawData(){return new Blob(['x']);}}),new ScannerDecoder({scanImage:async()=> 'match'}));
+  assert.equal(await core.decode(new Blob()),'match');
   assert.equal(await core.verify(new Blob(),'match'),true);
   assert.equal(await core.verify(new Blob(),'other'),false);
 });
