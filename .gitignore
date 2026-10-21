@@ -4,3 +4,5 @@ coverage/
 .DS_Store
 playwright-report/
 test-results/
+
+/.pfx-release-tools/
