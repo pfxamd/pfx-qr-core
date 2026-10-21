@@ -1,6 +1,6 @@
 {
   "name": "@pfxamd/qr-core",
-  "version": "0.1.0-alpha.6",
+  "version": "0.1.0-alpha.7",
   "private": true,
   "type": "module",
   "description": "Framework-independent QR encoding, styling, validation, scanning and export adapters",
