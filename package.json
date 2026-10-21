@@ -13,7 +13,8 @@
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test tests/*.test.mjs",
     "verify": "npm run typecheck && npm test",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "release:version": "node .pfx/release.mjs --sync"
   },
   "dependencies": {
     "qr-code-styling": "1.9.2",
@@ -34,6 +35,8 @@
   },
   "files": [
     "dist/",
-    "README.md"
+    "README.md",
+    "version.json",
+    "version-badge.svg"
   ]
 }

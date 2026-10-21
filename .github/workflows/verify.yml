@@ -7,15 +7,21 @@ permissions:
   contents: read
 jobs:
   core-and-browser:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Resolve deterministic core version
+        run: node .pfx/release.mjs --sync
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Verify types and unit tests
@@ -33,3 +39,7 @@ jobs:
             playwright-report/
             test-results/
           if-no-files-found: ignore
+      - name: Record current core version and badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: node .pfx/release.mjs --publish
+
