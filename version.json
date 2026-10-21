@@ -3,8 +3,8 @@
   "kind": "core",
   "product": "PFx QR Core",
   "channel": "Alpha",
-  "version": "0.1.0-alpha.8",
-  "label": "Alpha 0.1.0-alpha.8",
-  "commit": "19e714c8fe599b88e89487d6fda4948f2da864d7",
-  "sourceDate": "2026-10-21T18:19:50+01:00"
+  "version": "0.1.0-alpha.10",
+  "label": "Alpha 0.1.0-alpha.10",
+  "commit": "4d2ea54648a11b7d0e39b0ab1e9083c1096ce382",
+  "sourceDate": "2026-10-21T21:48:46+01:00"
 }
